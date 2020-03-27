@@ -9,4 +9,13 @@
     <dimen name="padding_medium">10dp</dimen>
     <dimen name="padding_large">20dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
+
+    <dimen name="banner_height">300dp</dimen>
+
+    <dimen name="dimen_4x8">32dp</dimen>
+    <dimen name="dimen_4x4">16dp</dimen>
+    <dimen name="dimen_4x2">8dp</dimen>
+    <dimen name="dimen_4x6">24dp</dimen>
+
+    <dimen name="dimen_8x8">64dp</dimen>
 </resources>

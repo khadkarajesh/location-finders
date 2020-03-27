@@ -1,9 +1,12 @@
 package com.nepninja.locationfinder.locationreminders.reminderslist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.auth.FirebaseAuth
 import com.nepninja.locationfinder.R
+import com.nepninja.locationfinder.authentication.AuthenticationActivity
 import com.nepninja.locationfinder.base.BaseFragment
 import com.nepninja.locationfinder.base.NavigationCommand
 import com.nepninja.locationfinder.databinding.FragmentRemindersBinding
@@ -20,7 +23,7 @@ class ReminderListFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reminders, container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reminders, container, false)
         binding.viewModel = _viewModel
 
         setHasOptionsMenu(true)
@@ -67,11 +70,17 @@ class ReminderListFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
-//                TODO: add the logout implementation
+                logout()
             }
         }
         return super.onOptionsItemSelected(item)
 
+    }
+
+    private fun logout() {
+        FirebaseAuth.getInstance().signOut()
+        activity?.finish()
+        startActivity(AuthenticationActivity.newIntent(activity as Context))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -35,9 +35,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name="com.nepninja.locationfinder.locationreminders.RemindersActivity">
-        </activity>
-        <activity android:name="com.nepninja.locationfinder.authentication.AuthenticationActivity" >
+        <activity android:name="com.nepninja.locationfinder.locationreminders.RemindersActivity"></activity>
+        <activity android:name="com.nepninja.locationfinder.authentication.AuthenticationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,12 +44,13 @@
             </intent-filter>
 
         </activity>
+
         <receiver
-            android:name="com.nepninja.locationfinder.com.nepninja.locationfinder.locationreminders.geofence.GeofenceBroadcastReceiver"
+            android:name="com.nepninja.locationfinder.locationreminders.geofence.GeofenceBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name="com.nepninja.locationfinder.com.nepninja.locationfinder.locationreminders.geofence.GeofenceTransitionsJobIntentService"
+            android:name="com.nepninja.locationfinder.locationreminders.geofence.GeofenceTransitionsJobIntentService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
