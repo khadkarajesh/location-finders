@@ -11,6 +11,7 @@ import com.nepninja.locationfinder.locationreminders.data.dto.ReminderDTO
 import com.nepninja.locationfinder.locationreminders.data.dto.Result
 import com.nepninja.locationfinder.locationreminders.data.local.RemindersLocalRepository
 import com.nepninja.locationfinder.locationreminders.reminderslist.ReminderDataItem
+import com.nepninja.locationfinder.locationreminders.savereminder.SaveReminderFragment.Companion.ACTION_GEOFENCE_EVENT
 import com.nepninja.locationfinder.utils.sendNotification
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
@@ -37,37 +38,40 @@ class GeofenceBroadcastReceiver : BroadcastReceiver(), KoinComponent, CoroutineS
         get() = Dispatchers.IO + coroutineJob
 
     override fun onReceive(context: Context, intent: Intent) {
-        val geofencingEvent = GeofencingEvent.fromIntent(intent)
-        if (geofencingEvent.hasError()) {
-            val errorMessage = GeofenceStatusCodes.getStatusCodeString(geofencingEvent.errorCode)
-            Log.e(TAG, errorMessage)
-        }
-
-        val geofenceTransition = geofencingEvent.geofenceTransition
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER
-            || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT
-        ) {
-            val fenceId = when {
-                geofencingEvent.triggeringGeofences.isNotEmpty() -> geofencingEvent.triggeringGeofences[0].requestId
-                else -> return
+        if (intent.action == ACTION_GEOFENCE_EVENT) {
+            val geofencingEvent = GeofencingEvent.fromIntent(intent)
+            if (geofencingEvent.hasError()) {
+                val errorMessage =
+                    GeofenceStatusCodes.getStatusCodeString(geofencingEvent.errorCode)
+                Log.e(TAG, errorMessage)
             }
 
-            val remindersLocalRepository: RemindersLocalRepository by inject()
-            CoroutineScope(coroutineContext).launch(SupervisorJob()) {
-                val result = remindersLocalRepository.getReminder(fenceId)
-                if (result is Result.Success<ReminderDTO>) {
-                    val reminderDTO = result.data
-                    sendNotification(
-                        context,
-                        ReminderDataItem(
-                            reminderDTO.title,
-                            reminderDTO.description,
-                            reminderDTO.location,
-                            reminderDTO.latitude,
-                            reminderDTO.longitude,
-                            reminderDTO.id
+            val geofenceTransition = geofencingEvent.geofenceTransition
+            if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER
+                || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT
+            ) {
+                val fenceId = when {
+                    geofencingEvent.triggeringGeofences.isNotEmpty() -> geofencingEvent.triggeringGeofences[0].requestId
+                    else -> return
+                }
+
+                val remindersLocalRepository: RemindersLocalRepository by inject()
+                CoroutineScope(coroutineContext).launch(SupervisorJob()) {
+                    val result = remindersLocalRepository.getReminder(fenceId)
+                    if (result is Result.Success<ReminderDTO>) {
+                        val reminderDTO = result.data
+                        sendNotification(
+                            context,
+                            ReminderDataItem(
+                                reminderDTO.title,
+                                reminderDTO.description,
+                                reminderDTO.location,
+                                reminderDTO.latitude,
+                                reminderDTO.longitude,
+                                reminderDTO.id
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
