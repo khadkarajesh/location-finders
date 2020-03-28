@@ -122,6 +122,9 @@ class SelectLocationFragment : BaseFragment() {
 
     private fun onLocationSelected(pointOfInterest: PointOfInterest) {
         _viewModel.selectedPOI.value = pointOfInterest
+        _viewModel.latitude.value = pointOfInterest.latLng.latitude
+        _viewModel.longitude.value = pointOfInterest.latLng.longitude
+        _viewModel.reminderSelectedLocationStr.value = "location"
         _viewModel.navigationCommand.value = NavigationCommand.Back
     }
 
