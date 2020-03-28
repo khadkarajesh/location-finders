@@ -29,6 +29,7 @@ import com.nepninja.locationfinder.R
 import com.nepninja.locationfinder.base.BaseFragment
 import com.nepninja.locationfinder.base.NavigationCommand
 import com.nepninja.locationfinder.databinding.FragmentSelectLocationBinding
+import com.nepninja.locationfinder.locationreminders.geofence.getAddress
 import com.nepninja.locationfinder.locationreminders.savereminder.SaveReminderViewModel
 import com.nepninja.locationfinder.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
@@ -124,7 +125,11 @@ class SelectLocationFragment : BaseFragment() {
         _viewModel.selectedPOI.value = pointOfInterest
         _viewModel.latitude.value = pointOfInterest.latLng.latitude
         _viewModel.longitude.value = pointOfInterest.latLng.longitude
-        _viewModel.reminderSelectedLocationStr.value = "location"
+        _viewModel.reminderSelectedLocationStr.value = getAddress(
+            activity as Context,
+            pointOfInterest.latLng.latitude,
+            pointOfInterest.latLng.longitude
+        )
         _viewModel.navigationCommand.value = NavigationCommand.Back
     }
 
