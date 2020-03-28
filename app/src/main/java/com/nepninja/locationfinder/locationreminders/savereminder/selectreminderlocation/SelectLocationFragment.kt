@@ -2,6 +2,7 @@ package com.nepninja.locationfinder.locationreminders.savereminder.selectreminde
 
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
@@ -16,6 +17,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PointOfInterest
+import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -24,6 +27,7 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import com.nepninja.locationfinder.R
 import com.nepninja.locationfinder.base.BaseFragment
+import com.nepninja.locationfinder.base.NavigationCommand
 import com.nepninja.locationfinder.databinding.FragmentSelectLocationBinding
 import com.nepninja.locationfinder.locationreminders.savereminder.SaveReminderViewModel
 import com.nepninja.locationfinder.utils.setDisplayHomeAsUpEnabled
@@ -53,17 +57,7 @@ class SelectLocationFragment : BaseFragment() {
             Manifest.permission.ACCESS_FINE_LOCATION
         ).withListener(object : PermissionListener {
             override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
-                fusedLocationClient.lastLocation.addOnSuccessListener {
-                    val latLng = LatLng(it.latitude, it.longitude)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-                    mMap.addMarker(MarkerOptions().position(latLng))
-                    mMap.uiSettings.setAllGesturesEnabled(true)
-                    mMap.setOnMapClickListener {
-                        mMap.clear()
-                        mMap.addMarker(MarkerOptions().position(it))
-                    }
-                }
+                showUserCurrentLocation()
             }
 
             override fun onPermissionRationaleShouldBeShown(
@@ -93,24 +87,42 @@ class SelectLocationFragment : BaseFragment() {
             } catch (e: Resources.NotFoundException) {
             }
         }
-
-//        TODO: add the map setup implementation
-//        TODO: zoom to the user location after taking his permission
-//        TODO: add style to the map
-//        TODO: put a marker to location that the user selected
-
-
-//        TODO: call this function after the user confirms on the selected location
-        onLocationSelected()
-
         return binding.root
     }
 
+    private fun showUserCurrentLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity as Activity)
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            val latLng = LatLng(location.latitude, location.longitude)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+            mMap.addMarker(MarkerOptions().position(latLng))
+            mMap.uiSettings.setAllGesturesEnabled(true)
+            mMap.setOnMapClickListener { latLng ->
+                mMap.clear()
+                mMap.addMarker(MarkerOptions().position(latLng))
+                showConfirmation(latLng)
+            }
+        }
+    }
 
-    private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
+    private fun showConfirmation(latLng: LatLng?) {
+        Snackbar
+            .make(
+                binding.root,
+                getString(R.string.msg_location_confirmation),
+                Snackbar.LENGTH_LONG
+            )
+            .setAction(
+                getString(R.string.txt_ok)
+            ) {
+                onLocationSelected(PointOfInterest(latLng, "", ""))
+            }.show()
+    }
+
+
+    private fun onLocationSelected(pointOfInterest: PointOfInterest) {
+        _viewModel.selectedPOI.value = pointOfInterest
+        _viewModel.navigationCommand.value = NavigationCommand.Back
     }
 
 

@@ -50,4 +50,6 @@
     <string name="txt_gmail">gmail</string>
     <string name="txt_email">email</string>
     <string name="sign_in_using">Sign in Using</string>
+    <string name="txt_ok">Ok</string>
+    <string name="msg_location_confirmation">Confirm your point of interest</string>
 </resources>
