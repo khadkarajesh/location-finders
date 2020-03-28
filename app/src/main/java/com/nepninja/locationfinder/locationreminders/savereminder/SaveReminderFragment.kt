@@ -61,8 +61,10 @@ class SaveReminderFragment : BaseFragment() {
 
             val reminderDataItem =
                 ReminderDataItem(title, description, location, latitude, longitude)
-            _viewModel.saveReminder(reminderDataItem)
 
+            if (!_viewModel.validateEnteredData(reminderDataItem)) return@setOnClickListener
+
+            _viewModel.validateAndSaveReminder(reminderDataItem)
             val geoFenceClient = LocationServices.getGeofencingClient(activity as Context)
 
             val geoFence = Geofence.Builder()
