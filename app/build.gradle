@@ -76,6 +76,7 @@ dependencies {
 
     //Koin
     implementation "org.koin:koin-android:$koinVersion"
+    implementation "org.koin:koin-androidx-scope:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
     implementation "org.koin:koin-androidx-fragment:$koinVersion"
 
@@ -91,6 +92,8 @@ dependencies {
     implementation 'com.karumi:dexter:6.0.2'
 
     implementation  'androidx.multidex:multidex:2.0.0'
+
+    implementation 'com.facebook.stetho:stetho:1.5.1'
 
     // Dependencies for local unit tests
     testImplementation "junit:junit:$junitVersion"
