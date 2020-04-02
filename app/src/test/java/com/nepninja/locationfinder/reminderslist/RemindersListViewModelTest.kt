@@ -13,6 +13,7 @@ import net.bytebuddy.matcher.ElementMatchers.isEquals
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.core.IsEqual
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -60,7 +61,10 @@ class RemindersListViewModelTest {
             remindersViewModel.remindersList.getOrAwaitValue(),
             `is`(notNullValue())
         )
-        assertEquals(remindersViewModel.remindersList.getOrAwaitValue(), fakeDataSource.dtoToPojo(data.data))
+        assertThat(
+            remindersViewModel.remindersList.getOrAwaitValue(),
+            IsEqual(fakeDataSource.dtoToPojo(data.data))
+        )
     }
 
     @Test
