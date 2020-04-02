@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.nepninja.locationfinder.locationreminders.reminderslist.ReminderDataItem" />
+            type="com.nepninja.locationfinder.reminderslist.ReminderDataItem" />
     </data>
 
     <androidx.cardview.widget.CardView

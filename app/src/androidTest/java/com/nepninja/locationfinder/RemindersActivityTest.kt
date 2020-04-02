@@ -4,11 +4,11 @@ import android.app.Application
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.nepninja.locationfinder.locationreminders.data.ReminderDataSource
-import com.nepninja.locationfinder.locationreminders.data.local.LocalDB
-import com.nepninja.locationfinder.locationreminders.data.local.RemindersLocalRepository
-import com.nepninja.locationfinder.locationreminders.reminderslist.RemindersListViewModel
-import com.nepninja.locationfinder.locationreminders.savereminder.SaveReminderViewModel
+import com.nepninja.locationfinder.data.ReminderDataSource
+import com.nepninja.locationfinder.data.local.LocalDB
+import com.nepninja.locationfinder.data.local.RemindersLocalRepository
+import com.nepninja.locationfinder.reminderslist.RemindersListViewModel
+import com.nepninja.locationfinder.savereminder.SaveReminderViewModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.runner.RunWith

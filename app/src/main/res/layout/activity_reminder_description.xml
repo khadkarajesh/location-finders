@@ -7,7 +7,7 @@
         <!--Data item that holds the reminder details-->
         <variable
             name="reminderDataItem"
-            type="com.nepninja.locationfinder.locationreminders.reminderslist.ReminderDataItem" />
+            type="com.nepninja.locationfinder.reminderslist.ReminderDataItem" />
     </data>
 
     <LinearLayout

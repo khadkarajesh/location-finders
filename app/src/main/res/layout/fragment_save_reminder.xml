@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.nepninja.locationfinder.locationreminders.savereminder.SaveReminderViewModel" />
+            type="com.nepninja.locationfinder.savereminder.SaveReminderViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

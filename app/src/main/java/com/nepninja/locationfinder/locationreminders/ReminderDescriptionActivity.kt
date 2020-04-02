@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.nepninja.locationfinder.R
 import com.nepninja.locationfinder.databinding.ActivityReminderDescriptionBinding
-import com.nepninja.locationfinder.locationreminders.reminderslist.ReminderDataItem
+import com.nepninja.locationfinder.reminderslist.ReminderDataItem
 
 /**
  * Activity that displays the reminder details after the user clicks on the notification

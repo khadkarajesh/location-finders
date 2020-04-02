@@ -10,7 +10,7 @@ import androidx.core.app.TaskStackBuilder
 import com.nepninja.locationfinder.BuildConfig
 import com.nepninja.locationfinder.R
 import com.nepninja.locationfinder.locationreminders.ReminderDescriptionActivity
-import com.nepninja.locationfinder.locationreminders.reminderslist.ReminderDataItem
+import com.nepninja.locationfinder.reminderslist.ReminderDataItem
 
 private const val NOTIFICATION_CHANNEL_ID = BuildConfig.APPLICATION_ID + ".channel"
 

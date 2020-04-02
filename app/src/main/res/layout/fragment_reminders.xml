@@ -7,14 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.nepninja.locationfinder.locationreminders.reminderslist.RemindersListViewModel" />
+            type="com.nepninja.locationfinder.reminderslist.RemindersListViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.nepninja.locationfinder.locationreminders.reminderslist.ReminderListFragment">
+        tools:context="com.nepninja.locationfinder.reminderslist.ReminderListFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

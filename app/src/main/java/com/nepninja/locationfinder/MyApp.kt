@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.facebook.stetho.Stetho
-import com.nepninja.locationfinder.locationreminders.data.ReminderDataSource
-import com.nepninja.locationfinder.locationreminders.data.local.LocalDB
-import com.nepninja.locationfinder.locationreminders.data.local.RemindersLocalRepository
-import com.nepninja.locationfinder.locationreminders.reminderslist.RemindersListViewModel
-import com.nepninja.locationfinder.locationreminders.savereminder.SaveReminderViewModel
+import com.nepninja.locationfinder.data.ReminderDataSource
+import com.nepninja.locationfinder.data.local.LocalDB
+import com.nepninja.locationfinder.data.local.RemindersLocalRepository
+import com.nepninja.locationfinder.reminderslist.RemindersListViewModel
+import com.nepninja.locationfinder.savereminder.SaveReminderViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel

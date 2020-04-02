@@ -7,11 +7,11 @@ import androidx.core.app.JobIntentService
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
-import com.nepninja.locationfinder.locationreminders.data.ReminderDataSource
-import com.nepninja.locationfinder.locationreminders.data.dto.ReminderDTO
-import com.nepninja.locationfinder.locationreminders.data.dto.Result
-import com.nepninja.locationfinder.locationreminders.reminderslist.ReminderDataItem
-import com.nepninja.locationfinder.locationreminders.savereminder.SaveReminderFragment
+import com.nepninja.locationfinder.data.ReminderDataSource
+import com.nepninja.locationfinder.data.dto.ReminderDTO
+import com.nepninja.locationfinder.data.dto.Result
+import com.nepninja.locationfinder.reminderslist.ReminderDataItem
+import com.nepninja.locationfinder.savereminder.SaveReminderFragment
 import com.nepninja.locationfinder.utils.sendNotification
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
