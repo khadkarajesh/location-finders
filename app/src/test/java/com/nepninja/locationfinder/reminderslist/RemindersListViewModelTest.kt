@@ -5,16 +5,20 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import com.nepninja.locationfinder.MainCoroutineRule
 import com.nepninja.locationfinder.data.FakeDataSource
+import com.nepninja.locationfinder.data.dto.Result
 import com.nepninja.locationfinder.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import net.bytebuddy.matcher.ElementMatchers.isEquals
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.internal.matchers.Equals
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -51,10 +55,12 @@ class RemindersListViewModelTest {
     @Test
     fun loadRemindersShouldReturnReminders_OnSuccess() = runBlockingTest {
         remindersViewModel.loadReminders()
+        val data = fakeDataSource.getReminders() as Result.Success
         assertThat(
             remindersViewModel.remindersList.getOrAwaitValue(),
             `is`(notNullValue())
         )
+        assertEquals(remindersViewModel.remindersList.getOrAwaitValue(), fakeDataSource.dtoToPojo(data.data))
     }
 
     @Test

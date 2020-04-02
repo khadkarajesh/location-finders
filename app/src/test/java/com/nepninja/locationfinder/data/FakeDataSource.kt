@@ -2,6 +2,7 @@ package com.nepninja.locationfinder.data
 
 import com.nepninja.locationfinder.data.dto.ReminderDTO
 import com.nepninja.locationfinder.data.dto.Result
+import com.nepninja.locationfinder.reminderslist.ReminderDataItem
 
 //Use FakeDataSource that acts as a test double to the LocalDataSource
 class FakeDataSource : ReminderDataSource {
@@ -52,6 +53,22 @@ class FakeDataSource : ReminderDataSource {
 
     override suspend fun deleteAllReminders() {
         reminders.clear()
+    }
+
+    fun dtoToPojo(dataItems: List<ReminderDTO>): List<ReminderDataItem>{
+        val dataList = ArrayList<ReminderDataItem>()
+        dataList.addAll(dataItems.map { reminder ->
+            //map the reminder data from the DB to the be ready to be displayed on the UI
+            ReminderDataItem(
+                reminder.title,
+                reminder.description,
+                reminder.location,
+                reminder.latitude,
+                reminder.longitude,
+                reminder.id
+            )
+        })
+        return dataList
     }
 
 
