@@ -7,7 +7,9 @@ import com.nepninja.locationfinder.MainCoroutineRule
 import com.nepninja.locationfinder.data.FakeDataSource
 import com.nepninja.locationfinder.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -44,6 +46,15 @@ class RemindersListViewModelTest {
         remindersViewModel.loadReminders()
 
         assertThat(remindersViewModel.showSnackBar.getOrAwaitValue(), `is`("Reminder not found"))
+    }
+
+    @Test
+    fun loadRemindersShouldReturnReminders_OnSuccess() = runBlockingTest {
+        remindersViewModel.loadReminders()
+        assertThat(
+            remindersViewModel.remindersList.getOrAwaitValue(),
+            `is`(notNullValue())
+        )
     }
 
     @Test
