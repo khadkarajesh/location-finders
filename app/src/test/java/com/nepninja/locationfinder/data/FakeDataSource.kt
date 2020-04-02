@@ -23,7 +23,7 @@ class FakeDataSource : ReminderDataSource {
     var reminders = listOf(
         servicingReminder,
         bookPurchaseReminder
-    )
+    ).toMutableList()
 
     private var shouldReturnError = false
 
@@ -40,7 +40,7 @@ class FakeDataSource : ReminderDataSource {
     }
 
     override suspend fun saveReminder(reminder: ReminderDTO) {
-        TODO("save the reminder")
+        reminders.add(reminder)
     }
 
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
@@ -51,7 +51,7 @@ class FakeDataSource : ReminderDataSource {
     }
 
     override suspend fun deleteAllReminders() {
-        TODO("delete all the reminders")
+        reminders.clear()
     }
 
 
