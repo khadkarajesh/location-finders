@@ -16,6 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+//        testInstrumentationRunner "com.nepninja.locationfinder.KoinTestRunner"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -31,6 +32,10 @@ android {
     testOptions.unitTests {
         includeAndroidResources = true
         returnDefaultValues = true
+    }
+
+    testOptions{
+        animationsDisabled = true
     }
 
     dataBinding {
@@ -125,7 +130,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espressoVersion"
     androidTestImplementation "junit:junit:$junitVersion"
     // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
-    implementation "androidx.fragment:fragment-testing:$fragmentVersion"
+    debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
     implementation "androidx.test:core:$androidXTestCoreVersion"
     implementation "androidx.fragment:fragment:$fragmentVersion"
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"

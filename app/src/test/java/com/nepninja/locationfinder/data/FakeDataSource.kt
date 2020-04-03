@@ -1,5 +1,8 @@
 package com.nepninja.locationfinder.data
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
+import com.nepninja.locationfinder.R
 import com.nepninja.locationfinder.data.dto.ReminderDTO
 import com.nepninja.locationfinder.data.dto.Result
 import com.nepninja.locationfinder.reminderslist.ReminderDataItem
@@ -35,7 +38,10 @@ class FakeDataSource : ReminderDataSource {
 
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
         if (shouldReturnError) {
-            return Result.Error("Reminder not found")
+            return Result.Error(
+                ApplicationProvider.getApplicationContext<Application>()
+                    .getString(R.string.err_reminder)
+            )
         }
         return Result.Success(reminders.toList())
     }
@@ -46,7 +52,10 @@ class FakeDataSource : ReminderDataSource {
 
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
         if (shouldReturnError) {
-            return Result.Error("Reminder not found")
+            return Result.Error(
+                ApplicationProvider.getApplicationContext<Application>()
+                    .getString(R.string.err_reminder)
+            )
         }
         return Result.Success(servicingReminder)
     }
@@ -55,7 +64,7 @@ class FakeDataSource : ReminderDataSource {
         reminders.clear()
     }
 
-    fun dtoToPojo(dataItems: List<ReminderDTO>): List<ReminderDataItem>{
+    fun dtoToPojo(dataItems: List<ReminderDTO>): List<ReminderDataItem> {
         val dataList = ArrayList<ReminderDataItem>()
         dataList.addAll(dataItems.map { reminder ->
             //map the reminder data from the DB to the be ready to be displayed on the UI
