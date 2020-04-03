@@ -100,7 +100,7 @@ class SelectLocationFragment : BaseFragment() {
             mMap.uiSettings.setAllGesturesEnabled(true)
             mMap.setOnMapClickListener { latLng ->
                 mMap.clear()
-                mMap.addMarker(MarkerOptions().position(latLng))
+                mMap.addMarker(MarkerOptions().title("Choose Location").position(latLng))
                 showConfirmation(latLng)
             }
         }

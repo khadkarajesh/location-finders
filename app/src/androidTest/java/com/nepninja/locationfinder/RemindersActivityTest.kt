@@ -5,9 +5,9 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.nepninja.locationfinder.data.ReminderDataSource
@@ -19,8 +19,10 @@ import com.nepninja.locationfinder.reminderslist.RemindersListViewModel
 import com.nepninja.locationfinder.savereminder.SaveReminderViewModel
 import com.nepninja.locationfinder.util.DataBindingIdlingResource
 import com.nepninja.locationfinder.util.monitorActivity
+import com.nepninja.locationfinder.util.setTextOnTextView
 import com.nepninja.locationfinder.utils.EspressoIdlingResource
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -120,7 +122,25 @@ class RemindersActivityTest :
         activityScenario.close()
     }
 
+    @Test
+    fun saveReminder_displayReminder() {
+        val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
 
-//    TODO: add End to End testing to the app
+        // Add Reminder
+        onView(withId(R.id.addReminderFAB)).perform(click())
+        onView(withId(R.id.reminderTitle)).perform(typeText("Purchase Candy"), closeSoftKeyboard())
+        onView(withId(R.id.reminderDescription)).perform(
+            typeText("Surprise for younger sister"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.selectLocation)).perform(setTextOnTextView("Local market"))
 
+        onView(withId(R.id.saveReminder)).perform(click())
+
+        onView(withText("Purchase Candy")).check(matches(isDisplayed()))
+        onView(withText("Surprise for younger sister")).check(matches(isDisplayed()))
+
+        activityScenario.close()
+    }
 }
