@@ -119,6 +119,7 @@ class RemindersActivityTest :
         onView(withText("Birthday Reminder")).check(matches(isDisplayed()))
         onView(withText("Grandma Birthday I need to buy cake")).check(matches(isDisplayed()))
 
+
         activityScenario.close()
     }
 
