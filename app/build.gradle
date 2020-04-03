@@ -83,7 +83,7 @@ dependencies {
     implementation "org.koin:koin-android:$koinVersion"
     implementation "org.koin:koin-androidx-scope:$koinVersion"
     implementation "org.koin:koin-androidx-viewmodel:$koinVersion"
-    implementation "org.koin:koin-androidx-fragment:$koinVersion"
+
 
     // Google services Dependencies
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
