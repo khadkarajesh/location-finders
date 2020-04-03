@@ -67,7 +67,7 @@ class ReminderListFragmentTest {
             Navigation.setViewNavController(it.view!!, navController)
         }
 
-        repository.getReminders()
+//        repository.getReminders()
 
         onView(withId(R.id.noDataTextView)).check(ViewAssertions.matches(isDisplayed()))
     }
