@@ -2,13 +2,14 @@ package com.nepninja.locationfinder
 
 import android.app.Application
 import androidx.test.core.app.ActivityScenario
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers.withDecorView
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.nepninja.locationfinder.data.ReminderDataSource
@@ -19,12 +20,9 @@ import com.nepninja.locationfinder.locationreminders.RemindersActivity
 import com.nepninja.locationfinder.reminderslist.RemindersListViewModel
 import com.nepninja.locationfinder.savereminder.SaveReminderViewModel
 import com.nepninja.locationfinder.util.DataBindingIdlingResource
-import com.nepninja.locationfinder.util.ToastMatcher
 import com.nepninja.locationfinder.util.monitorActivity
-import com.nepninja.locationfinder.util.setTextOnTextView
 import com.nepninja.locationfinder.utils.EspressoIdlingResource
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -35,16 +33,10 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
-import org.mockito.junit.MockitoJUnit.rule
-import org.hamcrest.Matchers.`is`
-
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-//END TO END test to black box test the app
-class RemindersActivityTest :
-    AutoCloseKoinTest() {// Extended Koin Test - embed autoclose @after method to close Koin after every test
-
+class AppNavigationTest : AutoCloseKoinTest() {
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
 
@@ -57,7 +49,7 @@ class RemindersActivityTest :
     @Before
     fun init() {
         stopKoin()//stop the original app koin
-        appContext = getApplicationContext()
+        appContext = ApplicationProvider.getApplicationContext()
         val myModule = module {
             viewModel {
                 RemindersListViewModel(
@@ -87,6 +79,7 @@ class RemindersActivityTest :
         }
     }
 
+
     /**
      * Idling resources tell Espresso that the app is idle or busy. This is needed when operations
      * are not scheduled in the main Looper (for example when executed on a different thread).
@@ -107,7 +100,8 @@ class RemindersActivityTest :
     }
 
     @Test
-    fun getReminders() = runBlocking {
+    fun onBackPressFromSaveReminderShouldReturnToDashboard() = runBlocking {
+
         val reminder = ReminderDTO(
             "Birthday Reminder"
             , "Grandma Birthday I need to buy cake"
@@ -115,42 +109,17 @@ class RemindersActivityTest :
             , 24.00
             , 48.00000
         )
-
         repository.saveReminder(reminder)
 
+
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
-        onView(withText("Birthday Reminder")).check(matches(isDisplayed()))
-        onView(withText("Grandma Birthday I need to buy cake")).check(matches(isDisplayed()))
-
-
-        activityScenario.close()
-    }
-
-    @Test
-    fun saveReminder_displayReminder() {
-        val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
-        dataBindingIdlingResource.monitorActivity(activityScenario)
-
-        // Add Reminder
         onView(withId(R.id.addReminderFAB)).perform(click())
-        onView(withId(R.id.reminderTitle)).perform(typeText("Purchase Candy"), closeSoftKeyboard())
-        onView(withId(R.id.reminderDescription)).perform(
-            typeText("Surprise for younger sister"),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.selectLocation)).perform(setTextOnTextView("Local market"))
 
-        onView(withId(R.id.saveReminder)).perform(click())
+        pressBack()
 
-        onView(withText("Purchase Candy")).check(matches(isDisplayed()))
-        onView(withText("Surprise for younger sister")).check(matches(isDisplayed()))
-
-
-        onView(withText(R.string.reminder_saved)).inRoot(ToastMatcher())
-            .check(matches(isDisplayed()))
-
+        onView(withId(R.id.nav_host_fragment)).check(matches(isDisplayed()))
 
         activityScenario.close()
     }
