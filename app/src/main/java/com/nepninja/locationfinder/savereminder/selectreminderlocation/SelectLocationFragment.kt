@@ -49,6 +49,8 @@ class SelectLocationFragment : BaseFragment() {
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val TAG = SelectLocationFragment::class.java.simpleName
+    private val settingRequestCode = 101
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -77,24 +79,7 @@ class SelectLocationFragment : BaseFragment() {
             }
 
             override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                MaterialAlertDialogBuilder(activity)
-                    .setTitle(getString(R.string.permission_rationale_title))
-                    .setMessage(getString(R.string.permission_rationale_message))
-                    .setPositiveButton(getString(R.string.txt_settings)) { dialog: DialogInterface, _: Int ->
-                        dialog.dismiss()
-                        startActivityForResult(
-                            Intent(
-                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                Uri.parse("package:" + BuildConfig.APPLICATION_ID)
-                            ),
-                            0
-                        )
-                    }
-                    .setNegativeButton(
-                        getString(R.string.cancel)
-                    ) { dialogInterface: DialogInterface, _: Int ->
-                        dialogInterface.dismiss()
-                    }.show()
+                showPermissionRationale()
             }
         }).check()
 
@@ -115,6 +100,27 @@ class SelectLocationFragment : BaseFragment() {
             }
         }
         return binding.root
+    }
+
+    private fun showPermissionRationale() {
+        MaterialAlertDialogBuilder(activity)
+            .setTitle(getString(R.string.permission_rationale_title))
+            .setMessage(getString(R.string.permission_rationale_message))
+            .setPositiveButton(getString(R.string.txt_settings)) { dialog: DialogInterface, _: Int ->
+                dialog.dismiss()
+                startActivityForResult(
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("""package:${BuildConfig.APPLICATION_ID}""")
+                    ),
+                    settingRequestCode
+                )
+            }
+            .setNegativeButton(
+                getString(R.string.cancel)
+            ) { dialogInterface: DialogInterface, _: Int ->
+                dialogInterface.dismiss()
+            }.show()
     }
 
     private fun showUserCurrentLocation() {
