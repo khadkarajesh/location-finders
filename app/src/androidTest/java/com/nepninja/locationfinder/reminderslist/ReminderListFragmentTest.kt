@@ -8,15 +8,15 @@ import androidx.navigation.Navigation
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.nepninja.locationfinder.R
 import com.nepninja.locationfinder.data.ReminderDataSource
+import com.nepninja.locationfinder.data.dto.ReminderDTO
+import com.nepninja.locationfinder.data.local.FakeRemindersRepository
 import com.nepninja.locationfinder.data.local.LocalDB
-import com.nepninja.locationfinder.data.local.RemindersLocalRepository
 import com.nepninja.locationfinder.savereminder.SaveReminderViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -37,10 +37,6 @@ import org.mockito.Mockito.verify
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
 class ReminderListFragmentTest : AutoCloseKoinTest() {
-//    TODO: test the navigation of the fragments.
-//    TODO: test the displayed data on the UI.
-//    TODO: add testing for the error messages.
-
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
 
@@ -61,7 +57,7 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
                     get() as ReminderDataSource
                 )
             }
-            single { RemindersLocalRepository(get()) as ReminderDataSource }
+            single { FakeRemindersRepository(get()) as ReminderDataSource }
             single { LocalDB.createRemindersDao(appContext) }
         }
         //declare a new koin module
@@ -87,7 +83,53 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
             Navigation.setViewNavController(it.view!!, navController)
         }
 
-        onView(withId(R.id.noDataTextView)).check(ViewAssertions.matches(isDisplayed()))
+        onView(withId(R.id.noDataTextView)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun saveReminder_showData() = runBlockingTest {
+        val reminder = ReminderDTO(
+            "Birthday Reminder"
+            , "Grandma Birthday I need to buy cake"
+            , "Big complex freak street"
+            , 24.00
+            , 48.00000
+        )
+
+        repository.saveReminder(reminder)
+
+        val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        val navController = mock(NavController::class.java)
+
+        scenario.onFragment {
+            Navigation.setViewNavController(it.view!!, navController)
+        }
+
+        onView(withText("Birthday Reminder")).check(
+            matches(
+                isDisplayed()
+            )
+        )
+        onView(withText("Grandma Birthday I need to buy cake")).check(
+            matches(
+                isDisplayed()
+            )
+        )
+    }
+
+    @Test
+    fun getReminders_showError() = runBlockingTest {
+        (repository as FakeRemindersRepository).setReturnError(true)
+
+        val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        val navController = mock(NavController::class.java)
+
+        scenario.onFragment {
+            Navigation.setViewNavController(it.view!!, navController)
+        }
+
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(withText(R.string.err_reminder)))
     }
 
 
