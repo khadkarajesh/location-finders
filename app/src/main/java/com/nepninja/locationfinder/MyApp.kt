@@ -1,5 +1,6 @@
 package com.nepninja.locationfinder
 
+import android.app.Application
 import android.content.Context
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
@@ -15,13 +16,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-class MyApp : MultiDexApplication() {
-
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
-    }
-
+class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Stetho.initializeWithDefaults(this);
