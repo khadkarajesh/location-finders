@@ -65,27 +65,36 @@ class SaveReminderFragment : BaseFragment() {
             if (!_viewModel.validateEnteredData(reminderDataItem)) return@setOnClickListener
 
             _viewModel.validateAndSaveReminder(reminderDataItem)
-            val geoFenceClient = LocationServices.getGeofencingClient(activity as Context)
 
-            val geoFence = Geofence.Builder()
-                .setRequestId(reminderDataItem.id)
-                .setCircularRegion(latitude!!, longitude!!, GEOFENCE_RADIUS_IN_METERS)
-                .setExpirationDuration(GEOFENCE_EXPIRATION_IN_MILLISECONDS)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
-                .build()
+            createFence(reminderDataItem, latitude, longitude)
+        }
+    }
 
-            val geoFenceRequest = GeofencingRequest.Builder()
-                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-                .addGeofence(geoFence)
-                .build()
+    private fun createFence(
+        reminderDataItem: ReminderDataItem,
+        latitude: Double?,
+        longitude: Double?
+    ) {
+        val geoFenceClient = LocationServices.getGeofencingClient(activity as Context)
 
-            geoFenceClient?.addGeofences(geoFenceRequest, geofencePendingIntent)?.run {
-                addOnSuccessListener {
-                    Log.d(TAG, "GeoFence request added successfully")
-                }
-                addOnFailureListener {
-                    Log.d(TAG, "GeoFence request failed to add")
-                }
+        val geoFence = Geofence.Builder()
+            .setRequestId(reminderDataItem.id)
+            .setCircularRegion(latitude!!, longitude!!, GEOFENCE_RADIUS_IN_METERS)
+            .setExpirationDuration(GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+            .build()
+
+        val geoFenceRequest = GeofencingRequest.Builder()
+            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+            .addGeofence(geoFence)
+            .build()
+
+        geoFenceClient?.addGeofences(geoFenceRequest, geofencePendingIntent)?.run {
+            addOnSuccessListener {
+                Log.d(TAG, "GeoFence request added successfully")
+            }
+            addOnFailureListener {
+                Log.d(TAG, "GeoFence request failed to add")
             }
         }
     }
