@@ -4,8 +4,13 @@ package com.nepninja.locationfinder.savereminder.selectreminderlocation
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.res.Resources
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -18,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PointOfInterest
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
@@ -25,6 +31,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import com.nepninja.locationfinder.BuildConfig
 import com.nepninja.locationfinder.R
 import com.nepninja.locationfinder.base.BaseFragment
 import com.nepninja.locationfinder.base.NavigationCommand
@@ -41,6 +48,7 @@ class SelectLocationFragment : BaseFragment() {
     private lateinit var binding: FragmentSelectLocationBinding
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val TAG = SelectLocationFragment::class.java.simpleName
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -69,7 +77,24 @@ class SelectLocationFragment : BaseFragment() {
             }
 
             override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-
+                MaterialAlertDialogBuilder(activity)
+                    .setTitle(getString(R.string.permission_rationale_title))
+                    .setMessage(getString(R.string.permission_rationale_message))
+                    .setPositiveButton(getString(R.string.txt_settings)) { dialog: DialogInterface, _: Int ->
+                        dialog.dismiss()
+                        startActivityForResult(
+                            Intent(
+                                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.parse("package:" + BuildConfig.APPLICATION_ID)
+                            ),
+                            0
+                        )
+                    }
+                    .setNegativeButton(
+                        getString(R.string.cancel)
+                    ) { dialogInterface: DialogInterface, _: Int ->
+                        dialogInterface.dismiss()
+                    }.show()
             }
         }).check()
 
@@ -86,6 +111,7 @@ class SelectLocationFragment : BaseFragment() {
                         )
                     )
             } catch (e: Resources.NotFoundException) {
+                Log.e(TAG, e.localizedMessage)
             }
         }
         return binding.root

@@ -53,4 +53,5 @@
     <string name="txt_ok">Ok</string>
     <string name="msg_location_confirmation">Confirm your point of interest</string>
     <string name="err_reminder">Reminder not found</string>
+    <string name="txt_settings">Settings</string>
 </resources>
